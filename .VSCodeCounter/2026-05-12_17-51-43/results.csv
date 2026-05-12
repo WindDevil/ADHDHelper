@@ -1,0 +1,8 @@
+"filename", "language", "JSON", "Rust", "comment", "blank", "total"
+"d:\03_workspace\24_ADHDHelper\src-tauri\build.rs", "Rust", 0, 3, 0, 1, 4
+"d:\03_workspace\24_ADHDHelper\src-tauri\capabilities\default.json", "JSON", 13, 0, 0, 1, 14
+"d:\03_workspace\24_ADHDHelper\src-tauri\src\lib.rs", "Rust", 0, 163, 8, 28, 199
+"d:\03_workspace\24_ADHDHelper\src-tauri\src\main.rs", "Rust", 0, 4, 1, 2, 7
+"d:\03_workspace\24_ADHDHelper\src-tauri\src\main_console.rs", "Rust", 0, 3, 0, 1, 4
+"d:\03_workspace\24_ADHDHelper\src-tauri\tauri.conf.json", "JSON", 48, 0, 0, 1, 49
+"Total", "-", 61, 173, 9, 34, 277

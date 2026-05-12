@@ -1,0 +1,65 @@
+Date : 2026-05-12 17:51:43
+Directory : d:\03_workspace\24_ADHDHelper\src-tauri
+Total : 22 files,  -401 codes, 2 comments, -77 blanks, all -476 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| Rust           |          4 |        173 |          9 |         32 |        214 |
+| JSON           |          2 |         61 |          0 |          2 |         63 |
+| XML            |          1 |         -1 |          0 |          0 |         -1 |
+| TypeScript JSX |          5 |       -145 |         -2 |        -24 |       -171 |
+| PostCSS        |          1 |       -213 |          0 |        -31 |       -244 |
+| TypeScript     |          9 |       -276 |         -5 |        -56 |       -337 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                              | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                 |         22 |       -401 |          2 |        -77 |       -476 |
+| . (Files)                                                         |          2 |         51 |          0 |          2 |         53 |
+| ..                                                                |         16 |       -635 |         -7 |       -111 |       -753 |
+| ..\src                                                            |         16 |       -635 |         -7 |       -111 |       -753 |
+| ..\src (Files)                                                    |          4 |       -226 |         -1 |        -36 |       -263 |
+| ..\src\assets                                                     |          1 |         -1 |          0 |          0 |         -1 |
+| ..\src\components                                                 |          2 |       -103 |         -2 |        -17 |       -122 |
+| ..\src\hooks                                                      |          2 |       -186 |         -4 |        -33 |       -223 |
+| ..\src\lib                                                        |          1 |         -5 |          0 |         -2 |         -7 |
+| ..\src\pages                                                      |          1 |        -29 |          0 |         -3 |        -32 |
+| ..\src\services                                                   |          1 |        -14 |          0 |         -5 |        -19 |
+| ..\src\types                                                      |          1 |         -8 |          0 |         -2 |        -10 |
+| ..\src\utils                                                      |          3 |        -63 |          0 |        -13 |        -76 |
+| capabilities                                                      |          1 |         13 |          0 |          1 |         14 |
+| src                                                               |          3 |        170 |          9 |         31 |        210 |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                          | language       | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\03_workspace\24_ADHDHelper\src-tauri\build.rs                  | Rust           |          3 |          0 |          1 |          4 |
+| d:\03_workspace\24_ADHDHelper\src-tauri\capabilities\default.json | JSON           |         13 |          0 |          1 |         14 |
+| d:\03_workspace\24_ADHDHelper\src-tauri\src\lib.rs                | Rust           |        163 |          8 |         28 |        199 |
+| d:\03_workspace\24_ADHDHelper\src-tauri\src\main.rs               | Rust           |          4 |          1 |          2 |          7 |
+| d:\03_workspace\24_ADHDHelper\src-tauri\src\main_console.rs       | Rust           |          3 |          0 |          1 |          4 |
+| d:\03_workspace\24_ADHDHelper\src-tauri\tauri.conf.json           | JSON           |         48 |          0 |          1 |         49 |
+| d:\03_workspace\24_ADHDHelper\src\App.tsx                         | TypeScript JSX |         -4 |          0 |         -2 |         -6 |
+| d:\03_workspace\24_ADHDHelper\src\assets\react.svg                | XML            |         -1 |          0 |          0 |         -1 |
+| d:\03_workspace\24_ADHDHelper\src\components\Empty.tsx            | TypeScript JSX |         -6 |         -1 |         -2 |         -9 |
+| d:\03_workspace\24_ADHDHelper\src\components\ReminderOverlay.tsx  | TypeScript JSX |        -97 |         -1 |        -15 |       -113 |
+| d:\03_workspace\24_ADHDHelper\src\hooks\useReminderApp.ts         | TypeScript     |       -162 |         -4 |        -28 |       -194 |
+| d:\03_workspace\24_ADHDHelper\src\hooks\useTheme.ts               | TypeScript     |        -24 |          0 |         -5 |        -29 |
+| d:\03_workspace\24_ADHDHelper\src\index.css                       | PostCSS        |       -213 |          0 |        -31 |       -244 |
+| d:\03_workspace\24_ADHDHelper\src\lib\utils.ts                    | TypeScript     |         -5 |          0 |         -2 |         -7 |
+| d:\03_workspace\24_ADHDHelper\src\main.tsx                        | TypeScript JSX |         -9 |          0 |         -2 |        -11 |
+| d:\03_workspace\24_ADHDHelper\src\pages\Home.tsx                  | TypeScript JSX |        -29 |          0 |         -3 |        -32 |
+| d:\03_workspace\24_ADHDHelper\src\services\config.ts              | TypeScript     |        -14 |          0 |         -5 |        -19 |
+| d:\03_workspace\24_ADHDHelper\src\types\reminder.ts               | TypeScript     |         -8 |          0 |         -2 |        -10 |
+| d:\03_workspace\24_ADHDHelper\src\utils\reminder.test.ts          | TypeScript     |        -35 |          0 |         -6 |        -41 |
+| d:\03_workspace\24_ADHDHelper\src\utils\reminder.ts               | TypeScript     |        -22 |          0 |         -5 |        -27 |
+| d:\03_workspace\24_ADHDHelper\src\utils\tauri.ts                  | TypeScript     |         -6 |          0 |         -2 |         -8 |
+| d:\03_workspace\24_ADHDHelper\src\vite-env.d.ts                   | TypeScript     |          0 |         -1 |         -1 |         -2 |
+| Total                                                             |                |       -401 |          2 |        -77 |       -476 |
++-------------------------------------------------------------------+----------------+------------+------------+------------+------------+

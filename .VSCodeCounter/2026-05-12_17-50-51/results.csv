@@ -1,0 +1,18 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "PostCSS", "XML", "comment", "blank", "total"
+"d:\03_workspace\24_ADHDHelper\src\App.tsx", "TypeScript JSX", 0, 4, 0, 0, 0, 2, 6
+"d:\03_workspace\24_ADHDHelper\src\assets\react.svg", "XML", 0, 0, 0, 1, 0, 0, 1
+"d:\03_workspace\24_ADHDHelper\src\components\Empty.tsx", "TypeScript JSX", 0, 6, 0, 0, 1, 2, 9
+"d:\03_workspace\24_ADHDHelper\src\components\ReminderOverlay.tsx", "TypeScript JSX", 0, 97, 0, 0, 1, 15, 113
+"d:\03_workspace\24_ADHDHelper\src\hooks\useReminderApp.ts", "TypeScript", 162, 0, 0, 0, 4, 28, 194
+"d:\03_workspace\24_ADHDHelper\src\hooks\useTheme.ts", "TypeScript", 24, 0, 0, 0, 0, 5, 29
+"d:\03_workspace\24_ADHDHelper\src\index.css", "PostCSS", 0, 0, 213, 0, 0, 31, 244
+"d:\03_workspace\24_ADHDHelper\src\lib\utils.ts", "TypeScript", 5, 0, 0, 0, 0, 2, 7
+"d:\03_workspace\24_ADHDHelper\src\main.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 2, 11
+"d:\03_workspace\24_ADHDHelper\src\pages\Home.tsx", "TypeScript JSX", 0, 29, 0, 0, 0, 3, 32
+"d:\03_workspace\24_ADHDHelper\src\services\config.ts", "TypeScript", 14, 0, 0, 0, 0, 5, 19
+"d:\03_workspace\24_ADHDHelper\src\types\reminder.ts", "TypeScript", 8, 0, 0, 0, 0, 2, 10
+"d:\03_workspace\24_ADHDHelper\src\utils\reminder.test.ts", "TypeScript", 35, 0, 0, 0, 0, 6, 41
+"d:\03_workspace\24_ADHDHelper\src\utils\reminder.ts", "TypeScript", 22, 0, 0, 0, 0, 5, 27
+"d:\03_workspace\24_ADHDHelper\src\utils\tauri.ts", "TypeScript", 6, 0, 0, 0, 0, 2, 8
+"d:\03_workspace\24_ADHDHelper\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 1, 1, 2
+"Total", "-", 276, 145, 213, 1, 7, 111, 753
