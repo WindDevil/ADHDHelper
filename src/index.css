@@ -212,6 +212,22 @@ button {
   outline-offset: 2px;
 }
 
+.panel__button--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff7ed;
+  font-weight: 600;
+}
+
+.panel__button--secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+.panel__button--active {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+}
+
 .panel__error {
   color: #fecaca;
   background: rgba(127, 29, 29, 0.35);

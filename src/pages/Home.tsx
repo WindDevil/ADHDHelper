@@ -9,8 +9,10 @@ export default function Home() {
     isVisible,
     error,
     countdownMs,
+    autoStartEnabled,
     reloadConfig,
     hideReminder,
+    toggleAutoStart,
     summary,
   } = useReminderApp()
 
@@ -24,8 +26,10 @@ export default function Home() {
       isVisible={isVisible}
       error={error}
       countdownMs={countdownMs}
+      autoStartEnabled={autoStartEnabled}
       onReload={() => void reloadConfig()}
       onDismiss={() => void hideReminder()}
+      onToggleAutoStart={() => void toggleAutoStart()}
     />
   )
 }

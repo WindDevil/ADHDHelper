@@ -1,4 +1,4 @@
-import { AlertCircle, Keyboard, RefreshCcw } from 'lucide-react'
+import { AlertCircle, Keyboard, Power, RefreshCcw } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
 import type { ReminderConfig } from '@/types/reminder'
@@ -12,8 +12,10 @@ interface ReminderOverlayProps {
   isVisible: boolean
   error: string | null
   countdownMs: number
+  autoStartEnabled: boolean
   onReload: () => void
   onDismiss: () => void
+  onToggleAutoStart: () => void
 }
 
 export default function ReminderOverlay({
@@ -25,8 +27,10 @@ export default function ReminderOverlay({
   isVisible,
   error,
   countdownMs,
+  autoStartEnabled,
   onReload,
   onDismiss,
+  onToggleAutoStart,
 }: ReminderOverlayProps) {
   const mainRef = useRef<HTMLElement>(null)
 
@@ -97,6 +101,14 @@ export default function ReminderOverlay({
           <button type="button" className="panel__button" onClick={onReload}>
             <RefreshCcw size={16} />
             重新加载配置
+          </button>
+          <button
+            type="button"
+            className={`panel__button panel__button--secondary ${autoStartEnabled ? 'panel__button--active' : ''}`}
+            onClick={onToggleAutoStart}
+          >
+            <Power size={16} />
+            {autoStartEnabled ? '开机自启 开' : '开机自启 关'}
           </button>
         </div>
 

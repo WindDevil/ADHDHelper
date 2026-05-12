@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
+import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { loadReminderConfig } from '@/services/config'
@@ -50,6 +51,7 @@ async function callHideReminder() {
 export function useReminderApp() {
   const [state, setState] = useState(INITIAL_STATE)
   const [countdownMs, setCountdownMs] = useState(0)
+  const [autoStartEnabled, setAutoStartEnabled] = useState(false)
   const timerRef = useRef<number | null>(null)
   const cycleStartRef = useRef(Date.now())
 
@@ -73,6 +75,27 @@ export function useReminderApp() {
       }))
     }
   }, [])
+
+  // 开机自启状态
+  useEffect(() => {
+    if (!isTauriRuntime()) return
+    isEnabled().then(setAutoStartEnabled).catch(() => {})
+  }, [])
+
+  const toggleAutoStart = useCallback(async () => {
+    if (!isTauriRuntime()) return
+    try {
+      if (autoStartEnabled) {
+        await disable()
+        setAutoStartEnabled(false)
+      } else {
+        await enable()
+        setAutoStartEnabled(true)
+      }
+    } catch (error) {
+      console.error('toggleAutoStart failed:', error)
+    }
+  }, [autoStartEnabled])
 
   const hideReminder = useCallback(async () => {
     await callHideReminder()
@@ -186,8 +209,10 @@ export function useReminderApp() {
   return {
     ...state,
     countdownMs,
+    autoStartEnabled,
     summary,
     hideReminder,
     reloadConfig: load,
+    toggleAutoStart,
   }
 }

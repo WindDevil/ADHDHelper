@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
-use tauri::{AppHandle, Emitter, Manager};
+use tauri::{
+  image::Image,
+  menu::{MenuBuilder, MenuItemBuilder},
+  tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+  AppHandle, Emitter, Manager,
+};
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use tauri_plugin_log::{Target, TargetKind};
 
@@ -106,7 +111,6 @@ async fn show_reminder(app: AppHandle) -> Result<(), String> {
     .set_focus()
     .map_err(|e| format!("set_focus 失败: {e}"))?;
 
-  // 注册空格全局快捷键
   let shortcut = Shortcut::new(None, Code::Space);
   app.global_shortcut().register(shortcut).ok();
 
@@ -127,13 +131,61 @@ async fn hide_reminder(app: AppHandle) -> Result<(), String> {
   window
     .set_always_on_top(false)
     .map_err(|e| format!("取消置顶失败: {e}"))?;
-  window.minimize().ok();
+  window.hide().ok();
 
-  // 注销快捷键
   let space = Shortcut::new(None, Code::Space);
   app.global_shortcut().unregister(space).ok();
 
   log::info!("reminder hidden, global shortcut unregistered");
+  Ok(())
+}
+
+fn build_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
+  let show = MenuItemBuilder::with_id("show", "显示窗口").build(app)?;
+  let autostart = MenuItemBuilder::with_id("autostart", "开机自启").build(app)?;
+  let quit = MenuItemBuilder::with_id("quit", "退出").build(app)?;
+
+  let menu = MenuBuilder::new(app)
+    .item(&show)
+    .separator()
+    .item(&autostart)
+    .separator()
+    .item(&quit)
+    .build()?;
+
+  TrayIconBuilder::new()
+    .icon(Image::from_bytes(include_bytes!("../icons/32x32.png"))?)
+    .tooltip("ADHD Helper")
+    .menu(&menu)
+    .on_menu_event(move |app, event| match event.id().as_ref() {
+      "show" => {
+        if let Some(window) = app.get_webview_window("main") {
+          window.unminimize().ok();
+          window.show().ok();
+          window.set_focus().ok();
+        }
+      }
+      "quit" => {
+        app.exit(0);
+      }
+      _ => {}
+    })
+    .on_tray_icon_event(|tray, event| {
+      if let TrayIconEvent::Click {
+        button: MouseButton::Left,
+        button_state: MouseButtonState::Up,
+        ..
+      } = event
+      {
+        if let Some(window) = tray.app_handle().get_webview_window("main") {
+          window.unminimize().ok();
+          window.show().ok();
+          window.set_focus().ok();
+        }
+      }
+    })
+    .build(app)?;
+
   Ok(())
 }
 
@@ -150,6 +202,10 @@ pub fn run() {
         .level(log::LevelFilter::Info)
         .build(),
     )
+    .plugin(tauri_plugin_autostart::init(
+      tauri_plugin_autostart::MacosLauncher::default(),
+      None::<Vec<&'static str>>,
+    ))
     .plugin(
       tauri_plugin_global_shortcut::Builder::new()
         .with_handler(move |app, shortcut, event| {
@@ -158,10 +214,6 @@ pub fn run() {
           }
           if shortcut.matches(Modifiers::default(), Code::Space) {
             log::info!("global shortcut: Space pressed");
-            // 注意：这里不做任何窗口操作或注销快捷键，
-            // 因为 handler 在插件工作线程中运行，且持有内部锁，
-            // 调用 unregister 会导致死锁。
-            // 仅发射事件通知前端，由前端通过 invoke 在主线程执行窗口操作。
             let _ = app.emit("space-pressed", ());
           }
         })
@@ -170,6 +222,8 @@ pub fn run() {
     .invoke_handler(tauri::generate_handler![load_config, show_reminder, hide_reminder])
     .setup(|app| {
       log::info!("app setup begin");
+
+      // 读取配置
       match read_or_create_config(&app.handle()) {
         Ok(payload) => {
           log::info!("config ready: {}", payload.config_path);
@@ -179,15 +233,14 @@ pub fn run() {
         }
       }
 
+      // 创建托盘图标
+      if let Err(e) = build_tray(&app.handle()) {
+        log::error!("tray init failed: {e}");
+      }
+
+      // 一开始窗口不显示，放到托盘
       if let Some(window) = app.get_webview_window("main") {
-        if let Err(error) = window.show() {
-          log::error!("window.show failed: {error}");
-        }
-        if let Err(error) = window.set_focus() {
-          log::error!("window.set_focus failed: {error}");
-        }
-      } else {
-        log::error!("main window not found");
+        window.hide().ok();
       }
 
       log::info!("app setup end");
