@@ -27,7 +27,15 @@ ADHD Helper 是一款桌面端全屏提醒应用，专为 ADHD 患者或容易�
 
 ## 使用方式
 
-### 1. 配置提醒
+### 1. 下载
+
+从 GitHub Releases 下载最新版 exe，开箱即用：
+
+[**⬇️ 下载 v0.1.0-beta.1**](https://github.com/WindDevil/ADHDHelper/releases/tag/v0.1.0-beta.1)
+
+运行 `adhd_helper_console.exe`（带控制台日志）或 `adhd_helper.exe`（无控制台窗口）即可启动。
+
+### 2. 配置提醒
 
 配置文件位于：
 
@@ -51,7 +59,7 @@ Windows: %APPDATA%\com.solo.adhdhelper\config.json
 
 修改后点击界面中的 **「重新加载配置」** 按钮即可生效。
 
-### 2. 运行
+### 3. 自行构建
 
 ```bash
 # 开发模式（浏览器预览，Tauri IPC 不可用）
@@ -68,7 +76,7 @@ cd src-tauri && cargo build --release --bin adhd_helper_console
 ./src-tauri/target/release/adhd_helper.exe
 ```
 
-### 3. 交互
+### 4. 交互
 
 | 操作                     | 效果                     |
 | ------------------------ | ------------------------ |
