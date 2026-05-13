@@ -48,7 +48,7 @@ async function callHideReminder() {
   }
 }
 
-export function useReminderApp() {
+export function useReminderApp(slave = false) {
   const [state, setState] = useState(INITIAL_STATE)
   const [countdownMs, setCountdownMs] = useState(0)
   const [autoStartEnabled, setAutoStartEnabled] = useState(false)
@@ -119,7 +119,7 @@ export function useReminderApp() {
   }, [load])
 
   useEffect(() => {
-    if (state.isLoading) {
+    if (state.isLoading || slave) {
       return undefined
     }
 
@@ -133,11 +133,11 @@ export function useReminderApp() {
         window.clearInterval(timerRef.current)
       }
     }
-  }, [showReminder, state.config.intervalSeconds, state.isLoading])
+  }, [showReminder, state.config.intervalSeconds, state.isLoading, slave])
 
-  // 倒计时
+  // 倒计时（副窗口不运行）
   useEffect(() => {
-    if (state.isLoading) return undefined
+    if (state.isLoading || slave) return undefined
 
     const updateCountdown = () => {
       const intervalMs = state.config.intervalSeconds * 1000
@@ -155,10 +155,9 @@ export function useReminderApp() {
     return () => window.clearInterval(id)
   }, [state.isLoading, state.lastTriggeredAt, state.config.intervalSeconds])
 
-  // 监听 Rust 侧全局快捷键触发的 Space 按下事件
-  // handler 只发射事件，由前端通过 invoke 在主线程执行窗口操作，避免死锁
+  // 监听 Rust 侧全局快捷键触发的 Space 按下事件（仅主窗口）
   useEffect(() => {
-    if (!isTauriRuntime()) return undefined
+    if (!isTauriRuntime() || slave) return undefined
 
     let unlisten: (() => void) | undefined
     const setup = async () => {
@@ -172,15 +171,16 @@ export function useReminderApp() {
     return () => {
       unlisten?.()
     }
-  }, [hideReminder])
+  }, [hideReminder, slave])
 
-  // 键盘监听作为后备（当全局快捷键失效时，如果 WebView2 收到了事件还能响应）
+  // 键盘监听作为后备（仅主窗口）
   const isVisibleRef = useRef(false)
   useEffect(() => {
-    isVisibleRef.current = state.isVisible
-  }, [state.isVisible])
+    if (!slave) isVisibleRef.current = state.isVisible
+  }, [state.isVisible, slave])
 
   useEffect(() => {
+    if (slave) return undefined
     const onKeyDown = (event: KeyboardEvent) => {
       const isSpace = event.code === 'Space' || event.key === ' '
       if (!isSpace || !isVisibleRef.current) return

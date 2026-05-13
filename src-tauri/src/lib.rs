@@ -5,7 +5,7 @@ use tauri::{
   image::Image,
   menu::{MenuBuilder, MenuItemBuilder},
   tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-  AppHandle, Emitter, Manager,
+  AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder,
 };
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use tauri_plugin_log::{Target, TargetKind};
@@ -90,53 +90,91 @@ fn load_config(app: AppHandle) -> Result<ReminderConfigPayload, String> {
   read_or_create_config(&app)
 }
 
-/// 由前端调用：弹出提醒窗口并注册空格全局快捷键
+fn get_window_labels() -> Vec<String> {
+  let mut labels = vec!["main".to_string()];
+  // 最多支持 8 个扩展显示器
+  for i in 1..=8 {
+    labels.push(format!("screen-{i}"));
+  }
+  labels
+}
+
+fn show_all_windows(app: &AppHandle) {
+  for label in get_window_labels() {
+    if let Some(window) = app.get_webview_window(&label) {
+      window.unminimize().ok();
+      window.show().ok();
+      window.set_focus().ok();
+    }
+  }
+}
+
+/// 在所有显示器上弹出提醒
 #[tauri::command]
 async fn show_reminder(app: AppHandle) -> Result<(), String> {
-  let window = app
-    .get_webview_window("main")
-    .ok_or_else(|| "找不到主窗口".to_string())?;
+  let monitors = app.available_monitors().map_err(|e| e.to_string())?;
 
-  window.unminimize().ok();
-  window
-    .show()
-    .map_err(|e| format!("show 失败: {e}"))?;
-  window
-    .set_always_on_top(true)
-    .map_err(|e| format!("set_always_on_top 失败: {e}"))?;
-  window
-    .set_fullscreen(true)
-    .map_err(|e| format!("set_fullscreen 失败: {e}"))?;
-  window
-    .set_focus()
-    .map_err(|e| format!("set_focus 失败: {e}"))?;
+  for (i, monitor) in monitors.iter().enumerate() {
+    let label = if i == 0 {
+      "main".to_string()
+    } else {
+      format!("screen-{i}")
+    };
+
+    let window = if let Some(w) = app.get_webview_window(&label) {
+      w
+    } else {
+      // 在新显示器上创建窗口
+      let pos = monitor.position();
+      let scale = monitor.scale_factor();
+      WebviewWindowBuilder::new(
+        &app,
+        &label,
+        WebviewUrl::App("index.html".into()),
+      )
+      .position(pos.x as f64 / scale, pos.y as f64 / scale)
+      .build()
+      .map_err(|e| format!("创建窗口 {label} 失败: {e}"))?
+    };
+
+    window.unminimize().ok();
+    window
+      .show()
+      .map_err(|e| format!("{label} show 失败: {e}"))?;
+    window
+      .set_always_on_top(true)
+      .map_err(|e| format!("{label} set_always_on_top 失败: {e}"))?;
+    window
+      .set_fullscreen(true)
+      .map_err(|e| format!("{label} set_fullscreen 失败: {e}"))?;
+
+    if i == 0 {
+      window.set_focus().ok();
+    }
+  }
 
   let shortcut = Shortcut::new(None, Code::Space);
   app.global_shortcut().register(shortcut).ok();
 
-  log::info!("reminder shown, global shortcut registered");
+  log::info!("reminder shown on {} monitor(s)", monitors.len());
   Ok(())
 }
 
-/// 由前端调用：关闭提醒并注销快捷键
+/// 关闭所有显示器上的提醒
 #[tauri::command]
 async fn hide_reminder(app: AppHandle) -> Result<(), String> {
-  let window = app
-    .get_webview_window("main")
-    .ok_or_else(|| "找不到主窗口".to_string())?;
-
-  window
-    .set_fullscreen(false)
-    .map_err(|e| format!("退出全屏失败: {e}"))?;
-  window
-    .set_always_on_top(false)
-    .map_err(|e| format!("取消置顶失败: {e}"))?;
-  window.hide().ok();
+  for label in get_window_labels() {
+    if let Some(window) = app.get_webview_window(&label) {
+      window.set_fullscreen(false).ok();
+      window.set_always_on_top(false).ok();
+      window.hide().ok();
+    }
+  }
 
   let space = Shortcut::new(None, Code::Space);
   app.global_shortcut().unregister(space).ok();
 
-  log::info!("reminder hidden, global shortcut unregistered");
+  log::info!("all reminders hidden");
   Ok(())
 }
 
@@ -159,11 +197,7 @@ fn build_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     .menu(&menu)
     .on_menu_event(move |app, event| match event.id().as_ref() {
       "show" => {
-        if let Some(window) = app.get_webview_window("main") {
-          window.unminimize().ok();
-          window.show().ok();
-          window.set_focus().ok();
-        }
+        show_all_windows(app);
       }
       "quit" => {
         app.exit(0);
@@ -177,11 +211,7 @@ fn build_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         ..
       } = event
       {
-        if let Some(window) = tray.app_handle().get_webview_window("main") {
-          window.unminimize().ok();
-          window.show().ok();
-          window.set_focus().ok();
-        }
+        show_all_windows(tray.app_handle());
       }
     })
     .build(app)?;
@@ -223,7 +253,6 @@ pub fn run() {
     .setup(|app| {
       log::info!("app setup begin");
 
-      // 读取配置
       match read_or_create_config(&app.handle()) {
         Ok(payload) => {
           log::info!("config ready: {}", payload.config_path);
@@ -233,12 +262,10 @@ pub fn run() {
         }
       }
 
-      // 创建托盘图标
       if let Err(e) = build_tray(&app.handle()) {
         log::error!("tray init failed: {e}");
       }
 
-      // 一开始窗口不显示，放到托盘
       if let Some(window) = app.get_webview_window("main") {
         window.hide().ok();
       }

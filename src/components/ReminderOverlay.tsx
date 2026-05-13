@@ -13,6 +13,7 @@ interface ReminderOverlayProps {
   error: string | null
   countdownMs: number
   autoStartEnabled: boolean
+  slaveMode: boolean
   onReload: () => void
   onDismiss: () => void
   onToggleAutoStart: () => void
@@ -28,6 +29,7 @@ export default function ReminderOverlay({
   error,
   countdownMs,
   autoStartEnabled,
+  slaveMode,
   onReload,
   onDismiss,
   onToggleAutoStart,
@@ -78,39 +80,43 @@ export default function ReminderOverlay({
 
         <h1 className="panel__message">{config.message}</h1>
 
-        <div className="panel__meta">
-          <span>提醒间隔 {intervalLabel}</span>
-          <span>{nextHint}</span>
-        </div>
+        {slaveMode ? null : (
+          <>
+            <div className="panel__meta">
+              <span>提醒间隔 {intervalLabel}</span>
+              <span>{nextHint}</span>
+            </div>
 
-        <div className="panel__countdown">
-          下次提醒：{countdownLabel}
-        </div>
+            <div className="panel__countdown">
+              下次提醒：{countdownLabel}
+            </div>
 
-        <div className="panel__hint">
-          <Keyboard size={18} />
-          <span>按空格关闭当前提醒，应用继续在后台等待下一轮。</span>
-        </div>
+            <div className="panel__hint">
+              <Keyboard size={18} />
+              <span>按空格关闭当前提醒，应用继续在后台等待下一轮。</span>
+            </div>
 
-        <div className="panel__footer">
-          <div className="panel__config">
-            <span className="panel__label">配置文件</span>
-            <code>{configPath || '正在生成配置文件路径...'}</code>
-          </div>
+            <div className="panel__footer">
+              <div className="panel__config">
+                <span className="panel__label">配置文件</span>
+                <code>{configPath || '正在生成配置文件路径...'}</code>
+              </div>
 
-          <button type="button" className="panel__button" onClick={onReload}>
-            <RefreshCcw size={16} />
-            重新加载配置
-          </button>
-          <button
-            type="button"
-            className={`panel__button panel__button--secondary ${autoStartEnabled ? 'panel__button--active' : ''}`}
-            onClick={onToggleAutoStart}
-          >
-            <Power size={16} />
-            {autoStartEnabled ? '开机自启 开' : '开机自启 关'}
-          </button>
-        </div>
+              <button type="button" className="panel__button" onClick={onReload}>
+                <RefreshCcw size={16} />
+                重新加载配置
+              </button>
+              <button
+                type="button"
+                className={`panel__button panel__button--secondary ${autoStartEnabled ? 'panel__button--active' : ''}`}
+                onClick={onToggleAutoStart}
+              >
+                <Power size={16} />
+                {autoStartEnabled ? '开机自启 开' : '开机自启 关'}
+              </button>
+            </div>
+          </>
+        )}
 
         {error ? (
           <div className="panel__error" role="status">
