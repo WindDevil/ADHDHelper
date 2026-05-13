@@ -44,10 +44,10 @@ Windows: %APPDATA%\com.solo.adhdhelper\config.json
 }
 ```
 
-| 参数 | 说明 | 默认值 |
-|------|------|--------|
-| `message` | 提醒文案，任意中英文 | `"回到当前最重要的事"` |
-| `intervalSeconds` | 提醒间隔（秒），最小 1 | `3` |
+| 参数                | 说明                   | 默认值                   |
+| ------------------- | ---------------------- | ------------------------ |
+| `message`         | 提醒文案，任意中英文   | `"回到当前最重要的事"` |
+| `intervalSeconds` | 提醒间隔（秒），最小 1 | `3`                    |
 
 修改后点击界面中的 **「重新加载配置」** 按钮即可生效。
 
@@ -70,38 +70,38 @@ cd src-tauri && cargo build --release --bin adhd_helper_console
 
 ### 3. 交互
 
-| 操作 | 效果 |
-|------|------|
-| 应用自动弹出全屏 | 提醒你回到当前任务 |
-| 按 **Space** | 关闭提醒，窗口隐藏到托盘 |
-| 左键点击托盘图标 | 手动显示窗口 |
-| 右键点击托盘图标 → 退出 | 关闭应用 |
-| 右键 → 开机自启 | 切换开机自启状态 |
-| 界面按钮 → 重新加载配置 | 热加载 config.json |
+| 操作                     | 效果                     |
+| ------------------------ | ------------------------ |
+| 应用自动弹出全屏         | 提醒你回到当前任务       |
+| 按**Space**        | 关闭提醒，窗口隐藏到托盘 |
+| 左键点击托盘图标         | 手动显示窗口             |
+| 右键点击托盘图标 → 退出 | 关闭应用                 |
+| 右键 → 开机自启         | 切换开机自启状态         |
+| 界面按钮 → 重新加载配置 | 热加载 config.json       |
 
 ---
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| **桌面壳** | [Tauri 2.11](https://v2.tauri.app/) — 原生 Windows 可执行文件 |
-| **后端** | [Rust 2021](https://www.rust-lang.org/) — 窗口管理、全局快捷键、托盘、文件 I/O |
-| **前端** | [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) |
-| **构建** | [Vite 6](https://vite.dev/) |
-| **样式** | [Tailwind CSS 3](https://tailwindcss.com/) + 自定义 CSS |
-| **图标** | [lucide-react](https://lucide.dev/) |
-| **测试** | [Vitest](https://vitest.dev/) |
-| **包管理** | npm |
+| 层级             | 技术                                                                         |
+| ---------------- | ---------------------------------------------------------------------------- |
+| **桌面壳** | [Tauri 2.11](https://v2.tauri.app/) — 原生 Windows 可执行文件                  |
+| **后端**   | [Rust 2021](https://www.rust-lang.org/) — 窗口管理、全局快捷键、托盘、文件 I/O |
+| **前端**   | [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)     |
+| **构建**   | [Vite 6](https://vite.dev/)                                                     |
+| **样式**   | [Tailwind CSS 3](https://tailwindcss.com/) + 自定义 CSS                         |
+| **图标**   | [lucide-react](https://lucide.dev/)                                             |
+| **测试**   | [Vitest](https://vitest.dev/)                                                   |
+| **包管理** | npm                                                                          |
 
 ### 主要 Rust 库
 
-| 库 | 用途 |
-|----|------|
-| `tauri-plugin-global-shortcut` | 全局 Space 快捷键捕获 |
-| `tauri-plugin-autostart` | 开机自启 |
-| `tauri-plugin-log` | 日志输出（stdout + 文件 + WebView） |
-| `serde` / `serde_json` | 配置文件序列化 |
+| 库                               | 用途                                |
+| -------------------------------- | ----------------------------------- |
+| `tauri-plugin-global-shortcut` | 全局 Space 快捷键捕获               |
+| `tauri-plugin-autostart`       | 开机自启                            |
+| `tauri-plugin-log`             | 日志输出（stdout + 文件 + WebView） |
+| `serde` / `serde_json`       | 配置文件序列化                      |
 
 ---
 
@@ -140,13 +140,23 @@ src-tauri/target/release/
 
 ## Credits
 
-使用以下工具链构建：
+### 灵感来源
+
+- [知乎回答：ADHD 相关工具与经验分享](https://www.zhihu.com/question/433235573/answer/86138003333) 
+  ![评论区截图](image/README/1778649908302.png)
+
+### 致谢博主
+
+- [小r改](https://www.zhihu.com/people/xu-chang-22-17)
+- [瓜皮特](https://www.zhihu.com/people/nature-77-73)
+
+### 构建工具
 
 <p align="left">
   <a href="https://claude.ai/code" target="_blank"><img src="https://img.shields.io/badge/Claude_Code-7C3AED?style=for-the-badge&logo=claude&logoColor=white" alt="Claude Code"></a>
-  &nbsp;
+   
   <a href="https://code.visualstudio.com/" target="_blank"><img src="https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudio&logoColor=white" alt="VS Code"></a>
-  &nbsp;
+   
   <a href="https://deepseek.com/" target="_blank"><img src="https://img.shields.io/badge/DeepSeek_Reasoner-4A90D9?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkM2LjQ3NzE1IDIgMiA2LjQ3NzE1IDIgMTJDMiAxNy41MjI5IDYuNDc3MTUgMjIgMTIgMjJDMTcuNTIyOSAyMiAyMiAxNy41MjI5IDIyIDEyQzIyIDYuNDc3MTUgMTcuNTIyOSAyIDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==&logoColor=white" alt="DeepSeek Reasoner"></a>
 </p>
 
