@@ -59,24 +59,7 @@ Windows: %APPDATA%\com.solo.adhdhelper\config.json
 
 修改后点击界面中的 **「重新加载配置」** 按钮即可生效。
 
-### 3. 自行构建
-
-```bash
-# 开发模式（浏览器预览，Tauri IPC 不可用）
-npm run dev
-
-# 构建桌面应用
-npx tauri build --no-bundle
-cd src-tauri && cargo build --release --bin adhd_helper_console
-
-# 运行（带控制台日志）
-./src-tauri/target/release/adhd_helper_console.exe
-
-# 运行（无控制台窗口）
-./src-tauri/target/release/adhd_helper.exe
-```
-
-### 4. 交互
+### 3. 交互
 
 | 操作                     | 效果                     |
 | ------------------------ | ------------------------ |
@@ -86,6 +69,47 @@ cd src-tauri && cargo build --release --bin adhd_helper_console
 | 右键点击托盘图标 → 退出 | 关闭应用                 |
 | 右键 → 开机自启         | 切换开机自启状态         |
 | 界面按钮 → 重新加载配置 | 热加载 config.json       |
+
+> 💡 以上步骤已覆盖日常使用的全部操作。如果只是使用这款工具，**无需关注下面的开发与构建内容**。
+
+---
+
+## 自行构建与开发
+
+以下内容面向希望自行编译或参与开发的用户。
+
+### 环境要求
+
+- Node.js 20+
+- Rust 1.77+
+- [Tauri CLI](https://v2.tauri.app/start/cli/)
+
+### 构建
+
+```bash
+# 安装依赖
+npm install
+
+# 构建前端
+npm run build
+
+# 构建桌面应用
+npx tauri build --no-bundle
+cd src-tauri && cargo build --release --bin adhd_helper_console
+```
+
+### 运行
+
+```bash
+# 开发模式（浏览器预览，Tauri IPC 不可用）
+npm run dev
+
+# 运行桌面应用（带控制台日志）
+./src-tauri/target/release/adhd_helper_console.exe
+
+# 运行桌面应用（无控制台窗口）
+./src-tauri/target/release/adhd_helper.exe
+```
 
 ---
 
