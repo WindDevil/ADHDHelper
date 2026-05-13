@@ -5,7 +5,7 @@ use tauri::{
   image::Image,
   menu::{MenuBuilder, MenuItemBuilder},
   tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-  AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder,
+  AppHandle, Emitter, Manager, WebviewUrl, WebviewWindowBuilder, WindowEvent,
 };
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use tauri_plugin_log::{Target, TargetKind};
@@ -268,6 +268,16 @@ pub fn run() {
 
       if let Some(window) = app.get_webview_window("main") {
         window.hide().ok();
+        // 拦截关闭按钮，改为隐藏到托盘
+        let handle = app.handle().clone();
+        window.on_window_event(move |event| {
+          if let WindowEvent::CloseRequested { api, .. } = event {
+            api.prevent_close();
+            if let Some(w) = handle.get_webview_window("main") {
+              let _ = w.hide();
+            }
+          }
+        });
       }
 
       log::info!("app setup end");
